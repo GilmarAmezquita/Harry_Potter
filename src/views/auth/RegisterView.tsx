@@ -1,8 +1,8 @@
 import { AccountCircle, EmailRounded, Lock } from "@mui/icons-material";
 import { Button, InputAdornment, Paper, TextField } from "@mui/material";
 import { useState } from "react";
-import { registerWithEmailAndPassword } from "../firebase";
-import { alertError, alertSuccess } from "../components/Alerts/alert";
+import { registerWithEmailAndPassword } from "../../firebase";
+import { alertError, alertSuccess } from "../../components/Alerts/alert";
 import { useNavigate } from "react-router-dom";
 
 const RegisterView = () => {
@@ -40,7 +40,7 @@ const RegisterView = () => {
         }
         registerWithEmailAndPassword(name, email, password);
         alertSuccess('Usuario registrado correctamente');
-        navigate('/#/');
+        navigate('/');
     }
 
     return (

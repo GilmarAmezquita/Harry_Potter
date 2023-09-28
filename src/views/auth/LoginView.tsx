@@ -1,11 +1,18 @@
 import { AccountCircle, Lock } from "@mui/icons-material";
 import { Button, InputAdornment, Paper, TextField } from "@mui/material";
 import { useState } from 'react'
-import { logInWithEmailAndPassword } from "../../firebase";
+import { auth } from "../../firebase";
+import { signInWithEmailAndPassword } from "@firebase/auth";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/reducers/auth";
+import { useNavigate } from "react-router-dom";
 
 const LoginView = () => {
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
@@ -16,7 +23,19 @@ const LoginView = () => {
     }
     
     const handleLogIn = () => {
-        logInWithEmailAndPassword(email, password);
+        signInWithEmailAndPassword(auth, email, password).then((response) => {     
+            dispatch({
+                type: login,
+                payload: {
+                    uid: response.user.uid,
+                    name: response.user.displayName,
+                    email: response.user.email,
+                    jwt: response.user.refreshToken,
+                    authProvider: response.user.providerId
+                }
+            })
+            navigate('/home');
+        });
     }
 
     return (
@@ -26,7 +45,7 @@ const LoginView = () => {
                 style={{ padding: '15px',
                         textAlign: 'center'
                     }}>
-                <form className="container">
+                <div className="container">
                     <h1 className="gradient-title">
                         <strong>
                             Iniciar Sesión
@@ -72,7 +91,7 @@ const LoginView = () => {
                         onClick={handleLogIn}>
                         Iniciar Sesión
                     </Button>
-                </form>
+                </div>
             </Paper>
         </div>
     )
