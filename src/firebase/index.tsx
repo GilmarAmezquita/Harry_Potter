@@ -7,7 +7,6 @@ import { getAuth,
 import { getFirestore,
     collection,
     addDoc } from "@firebase/firestore"
-
 const firebaseConfig = {
     apiKey: "AIzaSyB1jcAxvBVx7boNG0b9yTFu7tAdzJ4D7Zc",
     authDomain: "harrypottermyapi.firebaseapp.com",
@@ -26,7 +25,7 @@ const logInWithEmailAndPassword = async (email: string, password: string) => {
     try {
         await signInWithEmailAndPassword(auth, email, password).then((response) => {
             console.log(response);
-        });
+        })
     } catch (error) {
         console.log(error);
     }
@@ -56,7 +55,7 @@ const sendPasswordReset = async (email: string) => {
     }
 }
 
-const logout = () => {
+const logOut = () => {
     signOut(auth);
 }
 
@@ -66,5 +65,5 @@ export {
     logInWithEmailAndPassword,
     registerWithEmailAndPassword,
     sendPasswordReset,
-    logout
+    logOut
 }

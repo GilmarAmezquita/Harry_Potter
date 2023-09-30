@@ -14,6 +14,10 @@ const LoginView = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const goRegister = () => {
+        navigate('/register');
+    }
+
     const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
     }
@@ -39,7 +43,7 @@ const LoginView = () => {
     }
 
     return (
-        <div className="container" style={{ height: '100vh' }}>
+        <div className="container" style={{ height: '80vh'}}>
             <Paper 
                 elevation={3} 
                 style={{ padding: '15px',
@@ -81,7 +85,7 @@ const LoginView = () => {
                                 </InputAdornment>
                             )
                         }}/>
-                    <a href="/#/register" style={{ textDecoration: 'none', paddingBottom:'10px' }}>
+                    <a onClick={goRegister} style={{ paddingBottom:'10px' }}>
                         No tienes una cuenta? Registrate
                     </a>
                     <Button 

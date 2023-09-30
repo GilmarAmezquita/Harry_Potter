@@ -13,6 +13,10 @@ const RegisterView = () => {
 
     const navigate = useNavigate();
 
+    const goLogin = () => {
+        navigate('/login');
+    }
+
     const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
     }
@@ -40,89 +44,89 @@ const RegisterView = () => {
         }
         registerWithEmailAndPassword(name, email, password);
         alertSuccess('Usuario registrado correctamente');
-        navigate('/');
+        navigate('/#/login');
     }
 
     return (
-        <div className="container" style={{ height: '100vh' }}>
-        <Paper 
-            elevation={3} 
-            style={{ padding: '15px',
-                    textAlign: 'center'
-                }}>
-            <form className="container" autoComplete="off">
-                <h1 className="gradient-title">
-                    <strong>
-                        Registrate Aqui
-                    </strong>
-                </h1>
-                <TextField
-                    label="Nombre de usuario"
-                    variant="outlined"
-                    margin="normal"
-                    type="text"
-                    required
-                    value={name}
-                    onChange={handleChangeName}
-                    autoComplete="off"
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <AccountCircle />
-                            </InputAdornment>
-                        )
-                    }}/>
-                <TextField
-                    label="Correo de usuario"
-                    variant="outlined"
-                    margin="normal"
-                    type="text"
-                    required
-                    value={email}
-                    onChange={handleChangeEmail}
-                    autoComplete="off"
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <EmailRounded />
-                            </InputAdornment>
-                        )
-                    }}/>
-                <TextField
-                    label="Contraseña"
-                    variant="outlined"
-                    margin="normal"
-                    type="password"
-                    required
-                    value={password}
-                    error={password !== passwordConfirm}
-                    onChange={handleChangePassword}
-                    autoComplete="off"
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Lock />
-                            </InputAdornment>
-                        )
-                    }}/>
-                <TextField
-                    label="Confirmar contraseña"
-                    variant="outlined"
-                    margin="normal"
-                    type="password"
-                    required
-                    value={passwordConfirm}
-                    error={password !== passwordConfirm}
-                    onChange={handleChangePasswordConfirm}
-                    autoComplete="off"
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Lock />
-                            </InputAdornment>
-                        )
-                    }}/>
-                    <a href="/#/" style={{ textDecoration: 'none', paddingBottom:'10px' }}>
+        <div className="container">
+            <Paper 
+                elevation={3} 
+                style={{ padding: '15px',
+                        textAlign: 'center'
+                    }}>
+                <div className="container">
+                    <h1 className="gradient-title">
+                        <strong>
+                            Registrate Aqui
+                        </strong>
+                    </h1>
+                    <TextField
+                        label="Nombre de usuario"
+                        variant="outlined"
+                        margin="normal"
+                        type="text"
+                        required
+                        value={name}
+                        onChange={handleChangeName}
+                        autoComplete="off"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <AccountCircle />
+                                </InputAdornment>
+                            )
+                        }}/>
+                    <TextField
+                        label="Correo de usuario"
+                        variant="outlined"
+                        margin="normal"
+                        type="text"
+                        required
+                        value={email}
+                        onChange={handleChangeEmail}
+                        autoComplete="off"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <EmailRounded />
+                                </InputAdornment>
+                            )
+                        }}/>
+                    <TextField
+                        label="Contraseña"
+                        variant="outlined"
+                        margin="normal"
+                        type="password"
+                        required
+                        value={password}
+                        error={password !== passwordConfirm}
+                        onChange={handleChangePassword}
+                        autoComplete="off"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Lock />
+                                </InputAdornment>
+                            )
+                        }}/>
+                    <TextField
+                        label="Confirmar contraseña"
+                        variant="outlined"
+                        margin="normal"
+                        type="password"
+                        required
+                        value={passwordConfirm}
+                        error={password !== passwordConfirm}
+                        onChange={handleChangePasswordConfirm}
+                        autoComplete="off"
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Lock />
+                                </InputAdornment>
+                            )
+                        }}/>
+                    <a onClick={goLogin} style={{ paddingBottom:'10px' }}>
                         ¿Ya tienes una cuenta? Inicia sesión
                     </a>
                     <Button
@@ -133,8 +137,8 @@ const RegisterView = () => {
                         >
                         Registrate
                     </Button>
-            </form>
-        </Paper>  
+                </div>
+            </Paper>  
         </div>
     )
 }
