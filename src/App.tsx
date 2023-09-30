@@ -5,51 +5,46 @@ import Dashboard from "./views/home/Dashboard";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import { userProps } from "./store/reducers/auth";
+import Navbar from "./components/Navbar";
 
 const routerDefiner = (user:userProps) => {
-  if (user.uid) {
-    return createHashRouter([
-      {
-        path: '/',
-        element: <Navigate to={"/home/"} />
-      },
-      {
-        path: '/home',
-        element: (
-          <>
-            <h1>Home</h1>
-            <Outlet />
-          </>
-        ),
-        children: [
-          {
-            path: '',
-            element: <Dashboard />
-          },
-          {
-            path: 'list',
-            element: <h1>List</h1>
-          }
-        ]
-      },
-      {
-        path: '*',
-        element: <Navigate to={"/home/"} />
-      }
-    ]);
-  }
   return createHashRouter([
     {
-      path: '/',
-      element: <LoginView />
-    },
-    {
-      path: '/register',
-      element: <RegisterView />
-    },
-    {
-      path: '*',
-      element: <Navigate to={"/"} />
+      path: '',
+      element: (
+        <>
+          <Navbar />
+          <Outlet />
+        </>
+      ),
+      children: [
+        {
+          path: '/home',
+          element: <Outlet />,
+          children: [
+            {
+              path: '',
+              element: <Dashboard />
+            },
+            {
+              path: 'list',
+              element: <h1>List</h1>
+            }
+          ]
+        },
+        {
+          path: '/login',
+          element: user.uid ? <Navigate to={"/home/"} /> : <LoginView />
+        },
+        {
+          path: '/register',
+          element: user.uid ? <Navigate to={"/home/"} /> : <RegisterView />
+        },
+        {
+          path: '*',
+          element: <Navigate to={"/home/"} />
+        }
+      ]
     }
   ]);
 }
@@ -58,7 +53,9 @@ function App() {
   const user:userProps = useSelector((state: RootState) => state.value);
   
   return (
-    <RouterProvider router={routerDefiner(user)} />
+    <>
+      <RouterProvider router={routerDefiner(user)} />
+    </>
   ); 
 }
 
