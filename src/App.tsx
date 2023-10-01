@@ -1,11 +1,13 @@
 import { Navigate, Outlet, RouterProvider, createHashRouter } from "react-router-dom";
 import RegisterView from "./views/auth/RegisterView";
 import LoginView from "./views/auth/LoginView";
-import Dashboard from "./views/home/Dashboard";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store";
 import { userProps } from "./store/reducers/auth";
 import Navbar from "./components/Navbar";
+import Characters from "./views/characters/Characters";
+import Movies from "./views/movies/Movies";
+import Potions from "./views/potions/Potions";
 
 const routerDefiner = (user:userProps) => {
   return createHashRouter([
@@ -14,36 +16,37 @@ const routerDefiner = (user:userProps) => {
       element: (
         <>
           <Navbar />
-          <Navigate to={"/home/"} />
           <Outlet />
         </>
       ),
       children: [
         {
-          path: '/home',
-          element: <Outlet />,
-          children: [
-            {
-              path: '',
-              element: <Dashboard />
-            },
-            {
-              path: 'list',
-              element: <h1>List</h1>
-            }
-          ]
+          path: '',
+          element: <h1>Home</h1>
+        },
+        {
+          path: '/characters',
+          element: <Characters />
+        },
+        {
+          path: '/movies',
+          element: <Movies />
+        },
+        {
+          path: '/potions',
+          element: <Potions />
         },
         {
           path: '/login',
-          element: user.uid ? <Navigate to={"/home/"} /> : <LoginView />
+          element: user.uid ? <Navigate to={"/"} /> : <LoginView />
         },
         {
           path: '/register',
-          element: user.uid ? <Navigate to={"/home/"} /> : <RegisterView />
+          element: user.uid ? <Navigate to={"/"} /> : <RegisterView />
         },
         {
           path: '*',
-          element: <Navigate to={"/home/"} />
+          element: <Navigate to={"/"} />
         }
       ]
     }

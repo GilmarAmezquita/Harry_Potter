@@ -1,7 +1,7 @@
 import { Email, Lock } from "@mui/icons-material";
 import { Button, InputAdornment, Paper, TextField } from "@mui/material";
 import React, { useState } from 'react'
-import { loginWithEmailAndPassword } from "../../firebase";
+import { loginWithEmailAndPassword } from "../../services/firebase";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../store/reducers/auth";

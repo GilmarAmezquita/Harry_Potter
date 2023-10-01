@@ -1,7 +1,7 @@
 import { AccountCircle, EmailRounded, Lock, Phone } from "@mui/icons-material";
 import { Button, InputAdornment, Paper, TextField } from "@mui/material";
 import React, { useState } from "react";
-import { registerWithEmailAndPassword } from "../../firebase";
+import { registerWithEmailAndPassword } from "../../services/firebase";
 import { alertError, alertSuccess } from "../../components/Alerts/alert";
 import { useNavigate } from "react-router-dom";
 
