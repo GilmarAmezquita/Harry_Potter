@@ -1,5 +1,7 @@
-import { Dialog, DialogContent, Typography } from "@mui/material";
+import { Dialog, DialogActions, DialogContent, Typography } from "@mui/material";
 import { PotionProp } from "./PotionProp";
+import ButtonWiki from "../../components/Buttons/ButtonWiki";
+import ButtonClose from "../../components/Buttons/ButtonClose";
 
 interface PotionModalProps {
     potion: PotionProp;
@@ -10,7 +12,7 @@ interface PotionModalProps {
 const PotionModal = ({ potion, openModal, onClose }: PotionModalProps) => {
     return (
         <Dialog 
-            maxWidth="md"
+            maxWidth="sm"
             fullWidth
             open={openModal} 
             onClose={onClose}
@@ -19,15 +21,14 @@ const PotionModal = ({ potion, openModal, onClose }: PotionModalProps) => {
                 <div style={{
                     display: "flex",
                     flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    justifyContent: "space-evenly",
                     flexWrap: "wrap",
                 }}>
                     <div style={{
                         display: "flex",
                         flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
+                        alignItems: "flex-start",
+                        width: "40%",
                     }}>
                         <img src={potion.attributes.image} alt={potion.attributes.name} style={{maxWidth: "100%"}}/>
                         <Typography variant="h4">
@@ -40,9 +41,36 @@ const PotionModal = ({ potion, openModal, onClose }: PotionModalProps) => {
                             {potion.attributes.characteristics}
                         </Typography>
                         <p>Duration: {potion.attributes.time? potion.attributes.time : "N/A"}</p>
-                    </div>         
+                    </div>
+
+                    <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        width: "40%",
+                    }}>
+                        <Typography variant="overline">
+                            <strong>Difficulty:</strong> {potion.attributes.difficulty? potion.attributes.difficulty : "N/A"}
+                        </Typography>
+                        <Typography variant="overline">
+                            <strong>Inventors:</strong> {potion.attributes.inventors? potion.attributes.inventors : "N/A"}
+                        </Typography>
+                        <Typography variant="overline">
+                            <strong>Ingredients:</strong> {potion.attributes.ingredients? potion.attributes.ingredients : "N/A"}
+                        </Typography>
+                        <Typography variant="overline">
+                            <strong>Manufacturers:</strong> {potion.attributes.manufacturers? potion.attributes.manufacturers : "N/A"}
+                        </Typography>
+                        <Typography variant="overline">
+                            <strong>Side effects:</strong> {potion.attributes.side_effects? potion.attributes.side_effects : "N/A"}
+                        </Typography>
+                    </div>
                 </div>
             </DialogContent>
+            <DialogActions style={{justifyContent: "space-evenly" }}>
+                <ButtonWiki wiki={potion.attributes.wiki} />
+                <ButtonClose onClose={onClose} />
+            </DialogActions>
         </Dialog>
     )
 }

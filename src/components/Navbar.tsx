@@ -7,6 +7,7 @@ import { userProps } from '../store/reducers/auth';
 import { logOut } from '../services/firebase/index'
 import { logout } from "../store/reducers/auth";
 import { useNavigate } from 'react-router-dom';
+import { alertSuccess } from './Alerts/alert';
 
 const Navbar = () => {
     const user:userProps = useSelector((state: RootState) => state.value);
@@ -19,6 +20,7 @@ const Navbar = () => {
         dispatch({
             type: logout
         });
+        alertSuccess('Sesión cerrada correctamente');
     }
 
     const handleLogIn = () => {

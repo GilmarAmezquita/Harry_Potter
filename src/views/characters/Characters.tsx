@@ -55,6 +55,13 @@ const Characters = () => {
                         flexWrap: "wrap",
                     }}>
                         {characters.map((character) => {
+                            if (character.attributes.image === null) {
+                                if (character.attributes.gender === "male") {
+                                    character.attributes.image = 'Wizard.png';
+                                } else {
+                                    character.attributes.image = 'Witch.png';
+                                }
+                            }
                             return <CharacterCard character={character} key={character.id}/>;
                         })}
                     </div>

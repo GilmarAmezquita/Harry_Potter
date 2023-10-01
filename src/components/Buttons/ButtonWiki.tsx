@@ -11,7 +11,6 @@ const ButtonWiki = ({wiki}:ButtonWikiProps) => {
             size="large"
             edge="end"
             aria-label="wiki"
-            sx={{ color: "white" }}
             href={wiki}
             target="_blank"
         >
