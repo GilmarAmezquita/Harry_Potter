@@ -9,6 +9,10 @@ import { getFirestore,
     getDocs,
     query,
     where } from "@firebase/firestore"
+import { getStorage, 
+    ref,
+    uploadBytesResumable
+} from "@firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB1jcAxvBVx7boNG0b9yTFu7tAdzJ4D7Zc",
@@ -22,6 +26,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const loginWithEmailAndPassword = async (email: string, password: string) => {
     try {
@@ -90,9 +95,17 @@ const logOut = () => {
     signOut(auth);
 }
 
+const uploadImage = async (file:any, characterId:string | undefined) => {
+    if (!characterId) return;
+    const storageRef = ref(storage,`/characters/${characterId}/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+}
+
 export {
     auth,
     db,
+    storage,
+    uploadImage,
     loginWithEmailAndPassword,
     registerWithEmailAndPassword,
     logOut

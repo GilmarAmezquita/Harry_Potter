@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar";
 import Characters from "./views/characters/Characters";
 import Movies from "./views/movies/Movies";
 import Potions from "./views/potions/Potions";
+import CharacterDetail from "./views/characters/CharacterDetail";
 
 const routerDefiner = (user:userProps) => {
   return createHashRouter([
@@ -27,6 +28,10 @@ const routerDefiner = (user:userProps) => {
         {
           path: '/characters',
           element: <Characters />
+        },
+        {
+          path: '/characters/:id',
+          element: <CharacterDetail /> 
         },
         {
           path: '/movies',

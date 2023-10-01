@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
 import { CharacterProp } from "./CharacterProp";
+import { useNavigate } from "react-router-dom";
 
 interface CharacterCardProps {
     character: CharacterProp;
 }
 
 const CharacterCard: React.FC<CharacterCardProps> = ({character}) => {
+    const navigate = useNavigate();
     const [image, setImage] = useState<string>('');
 
     useEffect(() => {
@@ -22,7 +24,9 @@ const CharacterCard: React.FC<CharacterCardProps> = ({character}) => {
     }, [character]);
 
     return (
-        <Card className="card">
+        <Card className="card"
+            onClick={() => navigate(`/characters/${character.id}`)}
+        >
             <CardMedia
                 className="card-media"
                 component="img"
