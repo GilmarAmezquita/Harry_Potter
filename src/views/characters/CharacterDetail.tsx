@@ -9,7 +9,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { uploadImage } from "../../services/firebase";
+import { uploadImage, getImageByCharacterId } from "../../services/firebase";
 
 
 
@@ -18,17 +18,40 @@ export default function CharacterDetail() {
     const [file, setFile] = useState("");
     const [open, setOpen] = React.useState(false);
     const [character, setCharacter] = useState<CharacterProp>();
+    const [images, setImages] = useState<string[]>([]);
+    const [visibleAddImage, setVisibleAddImage] = useState<boolean>(true)
 
+    const pushImage = (url: string) => {
+        if (images.includes(url)) return;
+        let aux = images.slice();
+        console.log(aux);
+        aux.push(url);
+        setImages(aux);
+        if (url !== "") {
+            setVisibleAddImage(false);
+        }
+    }
 
     const { id } = useParams();
     useEffect(() => {
         getCharacter(id || "").then((data) => {
             console.log(data.data);
             setCharacter(data.data);
+            if (data.data.attributes.image !== null) {
+                setVisibleAddImage(false);
+                setImages([data.data.attributes.image]);
+            }
         });
     }, [id]);
 
+
+    useEffect(() => {
+        getImageByCharacterId(id, pushImage);
+    }, [])
+
+
     const handleClickOpen = () => {
+        console.log(images);
         setOpen(true);
     };
 
@@ -37,13 +60,14 @@ export default function CharacterDetail() {
     };
 
     const handleSubmit = async () => {
-        if(!file) return alert("Please select a file");
+        if (!file) return alert("Please select a file");
         await uploadImage(file, id);
+        window.location.reload();
         setOpen(false);
     }
-    
 
-    
+
+
     const handleUpload = (e: any) => {
         setFilePreview(URL.createObjectURL(e.target.files[0]));
         setFile(e.target.files[0]);
@@ -54,27 +78,6 @@ export default function CharacterDetail() {
         if (character) {
             return (
                 <>
-                    <div className="image" style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "column",
-                        width: "30%",
-                        height: "100%",
-
-                        border: "1px solid black",
-                    }}>
-                        {character.attributes.name ? <h1>{character.attributes.name}</h1> : <h1>no data of name</h1>}
-                        {character.attributes.image ? <img style={{ margin: 10 }} src={character.attributes.image} alt="character" /> : <h3>no image</h3>}
-                        {character.attributes.wiki ? <a href={character.attributes.wiki} target="_blank" rel="noreferrer">Wiki</a> : <h3>no wiki</h3>}
-                        <Button
-                            variant="contained"
-                            color="success"
-                            startIcon={<AddIcon />}
-                            style={{ margin: 10 }}
-                            onClick={handleClickOpen}
-                        >Add image</Button>
-                    </div>
                     <div className="info"
                         style={{
                             display: "flex",
@@ -86,6 +89,18 @@ export default function CharacterDetail() {
                             border: "1px solid black",
                         }}
                     >
+                        {character.attributes.name ? <h1>{character.attributes.name}</h1> : <h1>no data of name</h1>}
+                        {character.attributes.wiki ? <a href={character.attributes.wiki} target="_blank" rel="noreferrer">Wiki</a> : <h3>no wiki</h3>}
+                        <Button
+                            variant="contained"
+                            color="success"
+                            startIcon={<AddIcon />}
+                            style={{
+                                margin: 10,
+                                visibility: visibleAddImage ? 'visible' : 'hidden'
+                            }}
+                            onClick={handleClickOpen}
+                        >Add image</Button>
                         {Object.keys(character.attributes).map((key, index) => {
                             if (key !== "image" && key !== "name" && key !== "family_members" && key !== "wiki") {
                                 return (
@@ -104,6 +119,7 @@ export default function CharacterDetail() {
                                                     <p key={index}>{family}</p>
                                                 )
                                             })) : <p>no data</p>}
+
                                     </div>
                                 )
                             } else {
@@ -124,6 +140,25 @@ export default function CharacterDetail() {
         }
     }
 
+    const renderImage = () => {
+        if (images) {
+            return (
+                <div>
+                    {images.map((image, index) => {
+                        return (
+                            <img key={index} src={image} style={{ maxHeight: '500px', maxWidth: '500px' }} />
+                        )
+                    })}
+                </div>
+            )
+        } else {
+            return (
+                <h3>loading...</h3>
+            )
+        }
+
+    }
+
     return (
         <div
             style={{
@@ -137,12 +172,27 @@ export default function CharacterDetail() {
                 backgroundColor: "rgba(255, 255, 255, 0.5)",
             }}
         >
+            <div
+                style={{
+                    display: "flex",
+                    width: "30%",
+                    height: "100%",
+                    flexDirection: "column",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    border: "1px solid black",
+                }}
+            >
+                {renderImage()}
+            </div>
+
             {renderCharacter()}
 
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add new image</DialogTitle>
                 <DialogContent>
-                    <img src={filePreview} style={{maxHeight:'500px',maxWidth:'500px'}}/>
+                    <img src={filePreview} style={{ maxHeight: '500px', maxWidth: '500px' }} />
                 </DialogContent>
                 <Button variant="contained" component="label">
                     Upload File
