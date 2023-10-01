@@ -5,8 +5,9 @@ const authSlice = createSlice({
     initialState: {
         value: {
             uid: '',
-            name: '',
+            username: '',
             email: '',
+            phone: '',
             jwt: '',
             authProvider: ''
         }
@@ -18,8 +19,9 @@ const authSlice = createSlice({
         logout: (state) => {
             state.value = {
                 uid: '',
-                name: '',
+                username: '',
                 email: '',
+                phone: '',
                 jwt: '',
                 authProvider: ''
             };
@@ -33,8 +35,9 @@ export default authSlice.reducer;
 
 export interface userProps {
     uid: string,
-    name: string,
+    username: string,
     email: string,
+    phone: string,
     jwt: string,
     authProvider: string
 } 

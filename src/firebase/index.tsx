@@ -1,46 +1,87 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, 
-    signInWithEmailAndPassword, 
+import { getAuth,
+    signInWithEmailAndPassword,
     createUserWithEmailAndPassword, 
     sendPasswordResetEmail, 
     signOut } from "@firebase/auth";
 import { getFirestore,
     collection,
-    addDoc } from "@firebase/firestore"
+    addDoc,
+    getDocs,
+    query,
+    where } from "@firebase/firestore"
+
 const firebaseConfig = {
     apiKey: "AIzaSyB1jcAxvBVx7boNG0b9yTFu7tAdzJ4D7Zc",
     authDomain: "harrypottermyapi.firebaseapp.com",
     projectId: "harrypottermyapi",
     storageBucket: "harrypottermyapi.appspot.com",
     messagingSenderId: "1044475916000",
-    appId: "1:1044475916000:web:840b2f49da33d63d58ea85",
-    measurementId: "G-F5713YZBFF"
+    appId: "1:1044475916000:web:840b2f49da33d63d58ea85"
 };
   
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const logInWithEmailAndPassword = async (email: string, password: string) => {
+const loginWithEmailAndPassword = async (email: string, password: string) => {
     try {
-        await signInWithEmailAndPassword(auth, email, password).then((response) => {
-            console.log(response);
-        })
+        await signInWithEmailAndPassword(auth, email, password);
+        const authResponse = await signInWithEmailAndPassword(auth, email, password);
+        const callResponse = await getDocs(query(collection(db, "users"), where("email", "==", email)));
+        if (callResponse.empty) {
+            return [
+                {
+                    status: 404
+                },
+                {
+                    uid: '',
+                    username: '',
+                    email: '',
+                    phone: '',
+                    jwt: '',
+                    authProvider: ''
+                }
+            ]
+        }
+        const data = callResponse.docs[0].data();
+        return [
+            {
+                status: 200
+            },
+            {
+                uid: authResponse.user.uid,
+                username: data.username,
+                email: data.email,
+                phone: data.phone,
+                jwt: await authResponse.user.getIdToken(),
+                authProvider: authResponse.user.providerId
+            }
+        ]
     } catch (error) {
-        console.log(error);
+        return [
+            {
+                status: 400
+            },
+            {
+                uid: '',
+                username: '',
+                email: '',
+                phone: '',
+                jwt: '',
+                authProvider: ''
+            }
+        ]
     }
 }
 
-const registerWithEmailAndPassword = async (name: string, email: string, password: string) => {
+const registerWithEmailAndPassword = async (name: string, email: string, password: string, phone:string) => {
     try {
-        const res = await createUserWithEmailAndPassword(auth, email, password);
-        const user = res.user;
+        await createUserWithEmailAndPassword(auth, email, password);
         await addDoc(collection(db, 'users'), {
-            uid: user.uid,
-            name: name,
-            authProvider: "local",
+            username: name,
             email: email,
-            password: password
+            phone: phone
         })
     } catch (error) {
         console.log(error);
@@ -55,14 +96,14 @@ const sendPasswordReset = async (email: string) => {
     }
 }
 
-const logOut = () => {
-    signOut(auth);
+const logOut = async () => {
+    await signOut(auth);
 }
 
 export {
     auth,
     db,
-    logInWithEmailAndPassword,
+    loginWithEmailAndPassword,
     registerWithEmailAndPassword,
     sendPasswordReset,
     logOut

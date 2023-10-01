@@ -13,3 +13,10 @@ export const alertError = (title: string) => {
         title: title
     });
 }
+
+export const alertLoading = () => {
+    return Toast.fire({
+        icon: 'info',
+        title: 'Please Wait !'
+    });
+}
