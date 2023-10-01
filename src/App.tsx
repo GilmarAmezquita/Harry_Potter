@@ -14,27 +14,24 @@ const routerDefiner = (user:userProps) => {
       element: (
         <>
           <Navbar />
+          <Navigate to={"/home/"} />
           <Outlet />
         </>
       ),
       children: [
         {
-          path: '/',
+          path: '/home',
           element: <Outlet />,
           children: [
             {
               path: '',
-              element: user.uid ? <Dashboard /> : <Navigate to={"/login"} />
+              element: <Dashboard />
             },
             {
               path: 'list',
               element: <h1>List</h1>
             }
           ]
-        },
-        {
-          path: '/home',
-          element: user.uid ? <Dashboard /> : <Navigate to={"/login"} />
         },
         {
           path: '/login',

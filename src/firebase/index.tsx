@@ -1,8 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth,
     signInWithEmailAndPassword,
-    createUserWithEmailAndPassword, 
-    sendPasswordResetEmail, 
+    createUserWithEmailAndPassword,
     signOut } from "@firebase/auth";
 import { getFirestore,
     collection,
@@ -26,7 +25,6 @@ const db = getFirestore(app);
 
 const loginWithEmailAndPassword = async (email: string, password: string) => {
     try {
-        await signInWithEmailAndPassword(auth, email, password);
         const authResponse = await signInWithEmailAndPassword(auth, email, password);
         const callResponse = await getDocs(query(collection(db, "users"), where("email", "==", email)));
         if (callResponse.empty) {
@@ -88,16 +86,8 @@ const registerWithEmailAndPassword = async (name: string, email: string, passwor
     }
 }
 
-const sendPasswordReset = async (email: string) => {
-    try {
-        await sendPasswordResetEmail(auth, email);
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const logOut = async () => {
-    await signOut(auth);
+const logOut = () => {
+    signOut(auth);
 }
 
 export {
@@ -105,6 +95,5 @@ export {
     db,
     loginWithEmailAndPassword,
     registerWithEmailAndPassword,
-    sendPasswordReset,
     logOut
 }

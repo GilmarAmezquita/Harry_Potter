@@ -50,7 +50,7 @@ const RegisterView = () => {
         }
         registerWithEmailAndPassword(name, email, password, phone);
         alertSuccess('Usuario registrado correctamente');
-        navigate('/#/login');
+        goLogin();
     }
 
     return (

@@ -17,6 +17,6 @@ export const alertError = (title: string) => {
 export const alertLoading = () => {
     return Toast.fire({
         icon: 'info',
-        title: 'Please Wait !'
+        title: 'Porfavor Espera !'
     });
 }
