@@ -16,9 +16,9 @@ export default function CharacterDetail() {
     const [filePreview, setFilePreview] = useState<string | undefined>();
     const [file, setFile] = useState<File>();
     const [open, setOpen] = React.useState(false);
-    const [character, setCharacter] = useState<any>();
+    const [character, setCharacter] = useState<CharacterProp>();
     const [images, setImages] = useState<string[]>([]);
-    const [visibleAddImage, setVisibleAddImage] = useState<boolean>(user ? true : false);
+    const visibleAddImage = user ? true : false;
 
     const { id } = useParams();
     useEffect(() => {
@@ -39,7 +39,7 @@ export default function CharacterDetail() {
             setImages(aux);
         }
         getImageByCharacterId(id, pushImage);
-    }, [id, images])
+    }, [id])
 
 
     const handleClickOpen = () => {
@@ -91,19 +91,19 @@ export default function CharacterDetail() {
                             onClick={handleClickOpen}
                         >Add image</Button>
                         {Object.keys(character.attributes).map((key, index) => {
-                            if (key !== "image" && key !== "name" && key !== "family_members" && key !== "wiki") {
+                            if (key !== "image" && key !== "name" && key !== "family_member" && key !== "wiki") {
                                 return (
                                     <div key={index}>
                                         <h3>{key}</h3>
-                                        <p style={{ wordBreak: "break-all", whiteSpace: "normal" }}>{character.attributes[key] ? character.attributes[key] : "no data"}</p>
+                                        <p style={{ wordBreak: "break-all", whiteSpace: "normal" }}>{character.attributes[key as keyof CharacterProp['attributes']] ? character.attributes[key as keyof CharacterProp['attributes']] : "no data"}</p>
                                     </div>
                                 )
-                            } else if (key === "family_members") {
+                            } else if (key === "family_member") {
                                 return (
                                     <div key={index}>
                                         <h3>{key}</h3>
                                         {character.attributes[key] !== null ?
-                                            (character.attributes[key].map((family:any, index:number) => {
+                                            (character.attributes[key].map((family: string, index:number) => {
                                                 return (
                                                     <p key={index}>{family}</p>
                                                 )
@@ -152,8 +152,6 @@ export default function CharacterDetail() {
         <div
             style={{
                 display: "flex",
-                height: "90vh",
-                width: "100vw",
                 flexDirection: "row",
                 justifyContent: "flex-start",
                 alignItems: "center",

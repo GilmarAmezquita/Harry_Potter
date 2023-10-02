@@ -1,4 +1,4 @@
-interface attributes {
+export interface attributes {
     alias_name: string[];
     animagus: string;
     blood_status: string;
