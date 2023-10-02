@@ -11,6 +11,14 @@ export const getCharacters = async (page: number, filter: string) => {
     }
 }
 
+export const getCharacter = async (id: string) => {
+    try {
+        return (await axios.get(`/characters/${id}`)).data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 export const getMovies = async (page: number, filter: string) => {
     try {
         if (!filter) {

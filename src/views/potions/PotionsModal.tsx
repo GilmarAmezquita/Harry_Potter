@@ -31,9 +31,6 @@ const PotionModal = ({ potion, openModal, onClose }: PotionModalProps) => {
                         width: "40%",
                     }}>
                         <img src={potion.attributes.image} alt={potion.attributes.name} style={{maxWidth: "100%"}}/>
-                        <Typography variant="h4">
-                            {potion.attributes.name}
-                        </Typography>
                         <Typography variant="overline">
                             {potion.attributes.effect}
                         </Typography>
@@ -49,6 +46,9 @@ const PotionModal = ({ potion, openModal, onClose }: PotionModalProps) => {
                         alignItems: "flex-start",
                         width: "40%",
                     }}>
+                        <Typography variant="h4" sx={{ marginBottom: '10px'}}>
+                            {potion.attributes.name}
+                        </Typography>
                         <Typography variant="overline">
                             <strong>Difficulty:</strong> {potion.attributes.difficulty? potion.attributes.difficulty : "N/A"}
                         </Typography>

@@ -9,6 +9,12 @@ import { getFirestore,
     getDocs,
     query,
     where } from "@firebase/firestore"
+import { getStorage, 
+    ref,
+    uploadBytesResumable,
+    listAll,
+    getDownloadURL,
+} from "@firebase/storage";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB1jcAxvBVx7boNG0b9yTFu7tAdzJ4D7Zc",
@@ -22,6 +28,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const loginWithEmailAndPassword = async (email: string, password: string) => {
     try {
@@ -90,9 +97,34 @@ const logOut = () => {
     signOut(auth);
 }
 
+const uploadImage = async (file:any, characterId:string | undefined) => {
+    if (!characterId) return;
+    const storageRef = ref(storage,`/characters/${characterId}/${file.name}`);
+    await uploadBytesResumable(storageRef, file);
+    window.location.reload();
+}
+
+const getImageByCharacterId = async (characterId: string | undefined, pushImage: (url: string) => void) => {
+    if (!characterId) return [];
+    const storageRef = ref(storage, `/characters/${characterId}`);
+    const imageList = await listAll(storageRef);
+    
+    const imagePromises = imageList.items.map(async (itemRef) => {
+        const url = await getDownloadURL(itemRef);
+        pushImage(url);
+    });
+    
+    const images = await Promise.all(imagePromises);
+    return images;
+};
+
+
 export {
     auth,
     db,
+    storage,
+    uploadImage,
+    getImageByCharacterId,
     loginWithEmailAndPassword,
     registerWithEmailAndPassword,
     logOut
