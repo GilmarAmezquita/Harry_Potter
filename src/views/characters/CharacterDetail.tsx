@@ -20,19 +20,12 @@ export default function CharacterDetail() {
     const [images, setImages] = useState<string[]>([]);
     const [visibleAddImage, setVisibleAddImage] = useState<boolean>(user ? true : false);
 
-    const pushImage = (url: string) => {
-        if (images.includes(url)) return;
-        let aux = images.slice();
-        console.log(aux);
-        aux.push(url);
-        setImages(aux);
-    }
-
     const { id } = useParams();
     useEffect(() => {
         getCharacter(id || "").then((data) => {
             console.log(data.data);
             setCharacter(data.data);
+            data.data.attributes.image ? setImages([...images, data.data.attributes.image]) : setImages([]);
         });
     }, [id]);
 
@@ -44,9 +37,6 @@ export default function CharacterDetail() {
             console.log(aux);
             aux.push(url);
             setImages(aux);
-            if (url !== "") {
-                setVisibleAddImage(false);
-            }
         }
         getImageByCharacterId(id, pushImage);
     }, [id, images])
@@ -101,14 +91,14 @@ export default function CharacterDetail() {
                             onClick={handleClickOpen}
                         >Add image</Button>
                         {Object.keys(character.attributes).map((key, index) => {
-                            if (key !== "image" && key !== "name" && key !== "family_member" && key !== "wiki") {
+                            if (key !== "image" && key !== "name" && key !== "family_members" && key !== "wiki") {
                                 return (
                                     <div key={index}>
                                         <h3>{key}</h3>
                                         <p style={{ wordBreak: "break-all", whiteSpace: "normal" }}>{character.attributes[key] ? character.attributes[key] : "no data"}</p>
                                     </div>
                                 )
-                            } else if (key === "family_member") {
+                            } else if (key === "family_members") {
                                 return (
                                     <div key={index}>
                                         <h3>{key}</h3>
@@ -145,7 +135,7 @@ export default function CharacterDetail() {
                 <div>
                     {images.map((image, index) => {
                         return (
-                            <img key={index} src={image} style={{ maxHeight: '500px', maxWidth: '500px' }} />
+                            <img key={index} src={image} style={{ maxHeight: '100px', maxWidth: '100px', margin:"10px" }} />
                         )
                     })}
                 </div>

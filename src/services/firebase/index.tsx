@@ -95,6 +95,7 @@ const registerWithEmailAndPassword = async (name: string, email: string, passwor
 
 const logOut = () => {
     signOut(auth);
+    window.location.reload();
 }
 
 const uploadImage = async (file:any, characterId:string | undefined) => {
