@@ -9,25 +9,30 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { uploadImage, getImageByCharacterId } from "../../services/firebase";
+import { uploadImage, getImageByCharacterId, auth } from "../../services/firebase";
 
 export default function CharacterDetail() {
+    const user = auth.currentUser;
     const [filePreview, setFilePreview] = useState<string | undefined>();
     const [file, setFile] = useState<File>();
     const [open, setOpen] = React.useState(false);
-    const [character, setCharacter] = useState<CharacterProp>();
+    const [character, setCharacter] = useState<any>();
     const [images, setImages] = useState<string[]>([]);
-    const [visibleAddImage, setVisibleAddImage] = useState<boolean>(true)
+    const [visibleAddImage, setVisibleAddImage] = useState<boolean>(user ? true : false);
+
+    const pushImage = (url: string) => {
+        if (images.includes(url)) return;
+        let aux = images.slice();
+        console.log(aux);
+        aux.push(url);
+        setImages(aux);
+    }
 
     const { id } = useParams();
     useEffect(() => {
         getCharacter(id || "").then((data) => {
             console.log(data.data);
             setCharacter(data.data);
-            if (data.data.attributes.image !== null) {
-                setVisibleAddImage(false);
-                setImages([data.data.attributes.image]);
-            }
         });
     }, [id]);
 
@@ -59,7 +64,6 @@ export default function CharacterDetail() {
     const handleSubmit = async () => {
         if (!file) return alert("Please select a file");
         await uploadImage(file, id);
-        window.location.reload();
         setOpen(false);
     }
 
@@ -109,7 +113,7 @@ export default function CharacterDetail() {
                                     <div key={index}>
                                         <h3>{key}</h3>
                                         {character.attributes[key] !== null ?
-                                            (character.attributes[key].map((family, index) => {
+                                            (character.attributes[key].map((family:any, index:number) => {
                                                 return (
                                                     <p key={index}>{family}</p>
                                                 )
@@ -203,6 +207,9 @@ export default function CharacterDetail() {
                     <Button onClick={handleSubmit}>Submit</Button>
                 </DialogActions>
             </Dialog>
+
+
+
 
         </div>
     )
